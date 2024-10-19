@@ -5,7 +5,11 @@ In this project, we setup and end to end data engineering using Apache Spark, Az
 # Try running the following commands:
 
 dbt run # for running models
+
 dbt test # for tests
+
 dbt snapshot # for snapshotting and slowly changing dimensions
+
 dbt docs generate # for documentation
+
 dbt docs serve # for documentation preview
