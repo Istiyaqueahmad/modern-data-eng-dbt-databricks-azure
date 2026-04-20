@@ -4,7 +4,7 @@ In this project, we setup and end to end data engineering using Apache Spark, Az
 # Commands
 # Try running the following commands:
 
-dbt run # for running models 
+dbt run # for running models  
 
 dbt test # for tests
 
