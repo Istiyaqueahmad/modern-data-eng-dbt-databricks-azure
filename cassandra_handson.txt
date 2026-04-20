@@ -1,0 +1,67 @@
+get docker and Start docker container
+
+docker run --name my-cassandra -d cassandra:latest
+
+Following are csv files used for demo:
+
+employee.csv:
+
+ID, NAME, DEPT, YOJ, SALARY
+1,ROSE,IT,2012,26000
+2,SAM,SALES,2012,22000
+3,MIKE,HR,2013,30000
+4,NICK,R&D,2013,20000
+
+customer.csv:
+
+ID,NAME,AGE,ADDRESS,SALARY
+1,RONNY,32,NEW YORK,2000
+2,KATE,25,FLORIDA,1500
+3,KIM,23,SEATTLE,2000
+4,CLAY,25,BOSTON,6500
+5,HENRY,27,CALIFORNIA,8500
+6,KIT,22,CHICAGO,4500
+7,MUFFY,24,NEW YORK,10000
+
+order.csv:
+
+OID,DATE,CUSTOMER_ID,AMOUNT
+102,2018-08-08,3,3000
+100,2018-08-03,3,1500
+101,2018-11-02,2,1560
+103,2018-11-08,4,2060
+
+
+copy these files to docker container: /tmp folder
+
+docker cp *.csv my-cassandra:/tmp/
+
+Launch Cassandra cql client:
+
+docker exec -it my-cassandra cqlsh
+
+
+CREATE KEYSPACE if not exists cassandra_example WITH replication =
+{'class':'SimpleStrategy','replication_factor':1};
+
+use cassandra_example;
+
+create table employee (ID INT, NAME varchar, DEPT varchar, YOJ INT, SALARY INT, primary key (ID));
+
+create table customer (ID INT, NAME varchar, AGE INT, ADDRESS varchar, SALARY INT, primary key (ID));
+
+create table customer_order (ID INT, ORDER_DATE DATE, CUSTOMER_ID INT, AMOUNT FLOAT, primary key(ID));
+
+COPY employee (ID,NAME,DEPT, YOJ, SALARY) FROM '/tmp/employee.csv' WITH HEADER = true;
+
+select * from employee;
+
+COPY customer (ID,NAME,AGE,ADDRESS,SALARY) FROM '/tmp/customer.csv' WITH HEADER = true;
+
+select * from customer;
+
+COPY customer_order (ID,ORDER_DATE,CUSTOMER_ID,AMOUNT) FROM '/tmp/order.csv' WITH HEADER = true;
+
+select * from customer_order;
+
+
